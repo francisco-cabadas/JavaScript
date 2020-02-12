@@ -1,0 +1,49 @@
+body {
+    font-family: "Times New Roman", Georgia, Serif;
+    text-align: justify;}
+h1, h2, h3, h4, h5, h6 {
+    /* font-family: "Playfair Display"; */
+    text-align: center;
+    letter-spacing: 5px;
+    margin-bottom: 50px;
+}
+p { /* , form */
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 150px;
+    margin-left: 150px;
+        }
+
+
+.contenedor {
+        display: flex;
+        align-items: center;
+}
+.contenido {
+        margin: 0 auto; /* requerido para alineación horizontal */
+}
+form fieldset {
+    /* float: left; */
+    /* width: 13%; */
+    display: inline-block;
+}
+form{
+    width: 80%;
+    margin:auto;
+    /* display: inline-block; */
+}
+a.muestraoculta {  /* :link, a.muestraoculta:visited */
+    background-color: white;
+    color: black;
+    border: 2px solid green;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    }
+
+a.muestraoculta:hover, a.muestraoculta:active {
+    background-color: green;
+    color: white;
+    }

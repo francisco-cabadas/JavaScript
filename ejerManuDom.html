@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<!-- Este código sirvepara probar conceptos generales sobre el DOM y los eventos propios
+de JavaScript. -->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>UT05 Control del DOM</title>
+    <link rel="stylesheet" type="text/css" href="estiManu.css">
+</head>
+
+<body>
+    <h1> Julio Cortázar</h1>
+    <div class="contenedor">
+        <div id="enlaces" class="contenido">
+        </div>
+    </div>
+    <br>
+    <form id="modificaParr">
+        <div class="contenedor">
+            <div class="contenido">
+                <fieldset>
+                    <legend>Control<span id="ayudaNumParrafo"></span></legend>
+                    <label for="numParrafo"> Nº párrafo:</label><br>
+                    <input type="text" id="numParrafo" size="5" maxlength="5" value="1">
+                    <br>
+
+                    <br>
+                    <input id="cambio" type="button" value="modifica"><br>
+                    <input id="anadeParr" type="button" value="añadir"><br>
+                    <input id="eliminaParr" type="button" value="eliminar"><br>
+                </fieldset>
+                <fieldset>
+                    <legend>Texto a insertar:</legend>
+                    <textarea id="textonuevo" rows="7" cols="50" name="comment"
+                        form="anadeParr">Escribe el texto aquí mismo...</textarea>
+                </fieldset>
+            </div>
+        </div>
+    </form>
+
+    <div id="contenedorTexto">
+        <p id="contenidos_1">Parrafo 1 <a
+                href="https://es.wikipedia.org/wiki/Argentina">argentino</a>. Sin renunciar a su nacionalidad <a
+                href="https://es.wikipedia.org/wiki/Argentina">argentina</a>, optó por la nacionalidad francesa en 1981,
+            en
+            protesta contra el régimen militar <a href="https://es.wikipedia.org/wiki/Argentina">argentino</a>.</p>
+        <p id="contenidos_2"> parrafo 2             los autores más innovadores y originales de su tiempo, maestro del
+            cuento, la prosa poética y la narración breve en general, y creador de importantes novelas que inauguraron
+            una
+            nueva forma de hacer literatura en el mundo hispano, rompiendo los moldes clásicos mediante narraciones que
+            escapan de la linealidad temporal. Debido a que los contenidos de su obra transitan en la frontera entre lo
+            real
+            y lo fantástico, suele ser puesto en relación con el realismo mágico e incluso con el surrealismo.</p>
+        <p id="contenidos_3">parrafo 3                  Vivió tanto la infancia como la adolescencia e incipiente madurez en <a
+                href="https://es.wikipedia.org/wiki/Argentina">Argentina</a> y, desde la década de 1950, en Europa.
+            Residió
+            en Italia, España, Suiza y Francia, país donde se estableció en 1951 y en el que ambientó algunas de sus
+            obras.
+        </p>
+        <p id="contenidos_4">Parrafo 4                 Además de escritor, fue también un reconocido traductor, oficio que desempeñó, entre otros,
+            para la <a href="https://es.unesco.org/">Unesco</a>.​</p>
+        <p id="contenidos_5">parrafo 5                    En 1983, vuelta la democracia en <a
+                href="https://es.wikipedia.org/wiki/Argentina">Argentina</a>, Cortázar hizo un último viaje a su patria,
+            donde es recibido cálidamente por sus admiradores, que lo paran en la calle y le piden <a
+                href="https://es.unesco.org/"></a>autógrafos, en contraste con la indiferencia de las autoridades
+            nacionales.</p>
+        <p id="contenidos_6">parrafo 6                     <a href="https://es.wikipedia.org/wiki/Par%C3%ADs">París</a>, vivió sus últimos años en
+            dos
+            casas, una en la rue Martel y otra en la rue de L'Eperon. La primera correspondía a un pequeño apartamento
+            de
+            tercer piso sin ascensor, cómodo, luminoso y lleno de libros y discos de música, donde solía recibir
+            amablemente
+            continuas visitas de otros escritores que pasaban por la ciudad, en compañía de su gata.</p>
+    </div>
+</body>
+
+<script>
+    let parrafos = document.querySelectorAll('p');  //hace un nodelist de todos los parrafos
+    let enlaces;  //lo utilizamos en la funcion creaBotones
+    //https://www.jstips.co/es_es/javascript/converting-a-node-list-to-an-array/
+    //https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Function/apply
+    let arrayParrafos = Array.apply(null, parrafos); // hace un array de todos los parrafos
+
+    const botonCambio = document.getElementById('cambio');
+    const botonAnade = document.getElementById('anadeParr');
+    const botonelimina = document.getElementById('eliminaParr');      //asigna a una variable los botones de cambio,añadirParafo etc
+    const numParrafo = document.getElementById('numParrafo');
+
+    window.addEventListener("load",inicializaWeb); //
+
+    function inicializaWeb(){
+        creaBotones();
+        asignaEventos();
+    }
+
+    function creaBotones() {  //se utiliza solo cuando llamas a otras funciones
+        for (let j = 0; j < parrafos.length; j++) {    //con el numero de parrafos que hay...
+            let nuevoEnlace = document.createElement("a"); // Creación de un elemento <a>
+            nuevoEnlace.id = "enlace_" + (j + 1); // Definición de su identificador enlace + numero de parrafo que es
+            nuevoEnlace.classList.add("muestraoculta");  //le asigna un classList
+            nuevoEnlace.href = "#";   //enlace a algun sitio
+            nuevoEnlace.textContent = "Ocultar  párrafo " + (j + 1); // Definición de su contenido textual
+            nuevoEnlace.addEventListener("click", muestraOculta, false);  //evento que relaiza
+            document.getElementById("enlaces").appendChild(nuevoEnlace); // lo inserta como nodo con (appendchild=añade un nuevo nodo dentro de dom)
+        }
+        enlaces = document.querySelectorAll('a.muestraoculta');//crea nodelist para css y  muestra/oculta
+    }
+    function borraBotones() {  //se utiliza solo cuando llamas a otras funciones
+    let contenedorEnlaces= document.getElementById('enlaces');
+        for (let j = 0; j < enlaces.length; j++) {
+            contenedorEnlaces.removeChild(enlaces[j]);
+        }
+    }
+
+    function borraParrafos() {   //se utiliza solo cuando llamas a otras funciones
+       let contenedoTexto=  document.getElementById('contenedorTexto');
+        for (let j = 0; j < parrafos.length; j++) {
+            contenedoTexto.removeChild(parrafos[j]);
+        }
+        borraBotones();
+    }
+    function creaParrafos() {
+        for (let j = 0; j < arrayParrafos.length; j++) {
+            let nuevoParrafo = document.createElement("p"); // Creación de un elemento <a>
+            nuevoParrafo.id = "contenidos_" + (j + 1); // Definición de su identificador
+            nuevoParrafo.innerHTML = arrayParrafos[j].innerHTML; // Definición de su contenido HTML, pues tiene los enlaces que hay que mantener
+            document.getElementById("contenedorTexto").appendChild(nuevoParrafo); // Inserción del nuevo elemento
+        }
+        parrafos = document.querySelectorAll('p');
+        arrayParrafos = Array.apply(null, parrafos);
+    }
+
+
+    function borraParrafo() {  //borra parrarafo y al hacerlo llama a las otras funciones y lo que haces es=borra todos, crea todos, y crea todos los botones
+        let contenedoTexto = document.getElementById('contenedorTexto');
+        let numParraf = document.getElementById('numParrafo').value;  //coge el parametro del input texto
+        contenedoTexto.removeChild(parrafos[numParraf-1]);
+        //Con esta operación actualizo los párrafos que tengo en mi registro
+        parrafos = document.querySelectorAll('p'); //https://www.jstips.co/es_es/javascript/converting-a-node-list-to-an-array/
+        arrayParrafos = Array.apply(null, parrafos);
+        borraParrafos();
+        creaParrafos();
+        creaBotones();
+    }
+
+    function insertaParrafo() {
+        let nuevoParrafo = document.createElement("p"); // Creación de un elemento <a>
+        let numParraf = document.getElementById('numParrafo').value;
+        let textoNuevo = document.getElementById('textonuevo').value;
+
+        nuevoParrafo.id = "contenidos_" + numParraf; // Definición de su identificador
+        nuevoParrafo.innerHTML =textoNuevo; // Definición de su contenido HTML, pues tiene los enlaces que hay que mantener
+        //parrafo.style.display = (parrafo.style.display == 'none') ? 'block' : 'none';
+        numParraf=(numParraf== 0)? 1 : numParraf;
+        arrayParrafos.splice(numParraf-1, 0, nuevoParrafo);
+ 
+        borraParrafos();
+        creaParrafos();
+        creaBotones()
+    }
+
+
+    function muestraOculta() {
+        let idEnlace = this.id;
+        let trozos = idEnlace.split('_');
+        let numero = trozos[1];
+        let parrafo = document.getElementById('contenidos_' + numero);
+        
+        this.textContent  = (parrafo.style.display == 'none') ? 'Ocultar párrafo ' + numero : 'Mostrar párrafo ' + numero;
+        parrafo.style.display = (parrafo.style.display == 'none') ? 'block' : 'none';
+    }
+
+    function modificaParrafo() {
+        const _numParrafo = document.getElementById('numParrafo').value - 1;
+        if ((_numParrafo >= 0) && (_numParrafo < enlaces.length)) {
+            parrafos[_numParrafo].textContent = document.getElementById("textonuevo").value;
+        }
+    }
+          
+    function asignaEventos(){
+        let cuentaMiliseg=0, flagClicksAnteriores=0; // Variables de alcance de bloque para indicar 3 clicks
+
+        botonCambio.addEventListener("click", modificaParrafo);
+        botonAnade.addEventListener("click", insertaParrafo);
+        botonelimina.addEventListener("click", borraParrafo);                            //asigna eventos a los botones (llamas a las funciones)
+        numParrafo.addEventListener("focus", function () {
+            document.getElementById("ayudaNumParrafo").textContent = " número";});
+        numParrafo.addEventListener("blur", function (e) {
+            document.getElementById("ayudaNumParrafo").textContent = "";
+        });
+
+
+        function getColor(key) {           //asignación de letras con color
+            let color;
+            switch (key) {
+                case "r":
+                    color = "red";
+                    break;
+                case "v":
+                    color = "green";
+                    break;
+                case "a":
+                    color = "blue";
+                    break;
+            }
+            return color;
+        }
+
+
+        document.addEventListener("keydown", function (e) {      //función para cambiar de color
+            var colorParr = getColor(e.key.toLowerCase());
+            if (e.altKey) {
+                for (var i = 0; i < parrafos.length; i++) {
+                    parrafos[i].style.color = colorParr;
+                }
+                if (e.key == "n"){ /// caso de ALT + n
+                    console.log("Se anula comportamiento por defecto de nuestros enlaces");
+                    var MisEnlaces = document.getElementsByTagName("a");
+                    for(i=0;i<MisEnlaces.length;i++){
+                        MisEnlaces[i].addEventListener("click",evitarComportamiento);
+                      }
+                }
+                if (e.key == "s"){/// caso de ALT + s
+                    console.log("Se activa comportamiento por defecto de nuestros enlaces");
+                    var MisEnlaces = document.getElementsByTagName("a");
+                    for(i=0;i<MisEnlaces.length;i++){
+                        MisEnlaces[i].removeEventListener("click",evitarComportamiento);
+                    }
+                }
+            }
+        });
+        document.addEventListener("click", function (e) {  //evento 3 click borra todos los parrafps
+            let cuentaMilisegCop=e.timeStamp;
+
+            if (cuentaMiliseg > 0){
+         
+                if(flagClicksAnteriores==0){
+                    flagClicksAnteriores=(cuentaMilisegCop-cuentaMiliseg) > 2000 ? flagClicksAnteriores = 0 :flagClicksAnteriores =cuentaMilisegCop-cuentaMiliseg;
+                }
+                else if (((cuentaMilisegCop-cuentaMiliseg) + flagClicksAnteriores) < 2000){
+                    console.log("menos de 2 segundos, tres clicks!!!");
+                    borraParrafos();
+                }
+                else flagClicksAnteriores =0;
+            }
+            cuentaMiliseg=cuentaMilisegCop;
+        });
+    }
+
+    function evitarComportamiento(e){            //si funciona todo, no meter esto
+                comportamiento = window.event || e;
+                comportamiento.preventDefault();
+    }
+
+
+</script>
+
+</html>
